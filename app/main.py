@@ -37,7 +37,7 @@ async def pull_model(model_name):
 # Load Trivy logs from file
 def load_trivy_logs(log_path="trivy_output.json"):
     try:
-        with open(log_path, "r", encoding="utf-8") as file:  # Ändere hier
+        with open(log_path, "r") as file:
             raw_data = json.load(file)
             logging.debug(f"Raw Trivy log content: {json.dumps(raw_data, indent=2)}")
 
@@ -91,7 +91,7 @@ def build_prompt_with_logs(logs):
 
 # Send prompt to Ollama
 async def send_prompt_to_ollama(prompt, model="llama3.2", temperature=1.0):
-    url = "http://ollama-service:11434/api/pull"
+    url = "http://ollama-service:11434/api/generate"
     payload = {
         "model": model,
         "prompt": prompt,
@@ -140,16 +140,7 @@ async def send_discord_message_async(message):
 
 # Main entry
 async def main():
-
     try:
-<<<<<<< HEAD
-
-=======
-        await send_discord_message_async("✅ YoBot ist online! 🟢 Testnachricht funktioniert!")
-    except Exception as e:
-
-        logging.error(f"Fehler in main(): {e}")
->>>>>>> origin/main
         await pull_model("llama3.2")
         logs = load_trivy_logs()
         if not logs:
@@ -167,8 +158,6 @@ async def main():
 
     except Exception as e:
         logging.error(f"Error in main process: {e}")
-
-
 
 if __name__ == "__main__":
     asyncio.run(main())
